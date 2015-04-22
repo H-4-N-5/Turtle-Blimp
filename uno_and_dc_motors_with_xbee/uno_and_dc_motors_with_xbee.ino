@@ -59,13 +59,13 @@ void loop()
     
      if (turnPotVal > 145) {
       
-        rightMotorSpeed = abs(turnPotVal);
+        rightMotorSpeed = turnPotVal;
         leftMotorSpeed = 0;
       
       } else if (turnPotVal < 110) {
     
         rightMotorSpeed = 0;
-        leftMotorSpeed = abs(255 - turnPotVal);
+        leftMotorSpeed = (255 - turnPotVal);
         
       } else {
       
