@@ -13,8 +13,8 @@ int rightMotorSpeedPin = 10; // pin 10 --- right motor speed signal
 int leftMotorSpeed = 0;
 int rightMotorSpeed = 0;
 
-int turnPotVal = NULL;       // variable to store the value coming from the sensor
-
+int turnPotVal = 255;       // variable to store the value coming from the sensor
+int turnPotVal2 = 255;
 
 void setup() 
 { 
@@ -31,68 +31,33 @@ void setup()
  
 void loop() 
 { 
-
- 
-  if (Serial.available() > 0) {
-
-    // look for the next valid integer in the incoming serial stream:
-      turnPotVal = Serial.parseInt(); 
-    
-  }
- /*
- int potval = analogRead(A2);
- Serial.print("Received Value = ");
- Serial.println(potval);
- 
- Serial.print("Constrained Value = ");
- Serial.println(turnPotVal);
- */
- 
- 
- 
- turnPotVal = turnPotVal/4;
- 
-    //if (Serial.read() == '\n') {
-    //turnPotVal = analogRead(potPin);    // read the value from the potentiometer
-    
-    //Serial.println(turnPotVal);
-    
-     if (turnPotVal > 145) {
+  /*
+  if(!Serial) {
+    while(1);
+  }*/
+  
+    while (Serial.available() > 0) {
+  
+      // look for the next valid integer in the incoming serial stream:
+      turnPotVal = Serial.parseInt();
+       
+      turnPotVal2 = Serial.parseInt();
+   
+      rightMotorSpeed = (1023-turnPotVal)/4;
       
-        rightMotorSpeed = abs(turnPotVal);
-        leftMotorSpeed = 0;
+      leftMotorSpeed = turnPotVal2/4;
       
-      } else if (turnPotVal < 110) {
-    
-        rightMotorSpeed = 0;
-        leftMotorSpeed = abs(255 - turnPotVal);
-        
-      } else {
+      analogWrite(leftMotorSpeedPin,leftMotorSpeed); //Enable left motor by setting speed
+      analogWrite(rightMotorSpeedPin,rightMotorSpeed); //Enable left motor by setting speed
       
-        rightMotorSpeed = 255;
-        leftMotorSpeed = 255;
+      digitalWrite(leftmotorBackward,LOW); // Drives LOW outputs down first to avoid damage
+      digitalWrite(rightmotorBackward,LOW);
+      
+      digitalWrite(leftmotorForward,HIGH);
+      digitalWrite(rightmotorForward,HIGH);
       
     }
-    
-    /*
-    Serial.print("right motor speed = ");
-    Serial.println(rightMotorSpeed);
-    Serial.print("left motor speed = ");
-    Serial.println(leftMotorSpeed);
-    Serial.println("/n");
-    */
-
-    
-    //analogWrite(motorPinA, rightMotorSpeed);
-    //analogWrite(motorPinB, leftMotorSpeed);
-    
-    analogWrite(leftMotorSpeedPin,leftMotorSpeed); //Enable left motor by setting speed
-    analogWrite(rightMotorSpeedPin,rightMotorSpeed); //Enable left motor by setting speed
-    digitalWrite(leftmotorBackward,LOW); // Drives LOW outputs down first to avoid damage
-    digitalWrite(rightmotorBackward,LOW);
-    digitalWrite(leftmotorForward,HIGH);
-    digitalWrite(rightmotorForward,HIGH);
-    //}
+ 
   
 } 
 
